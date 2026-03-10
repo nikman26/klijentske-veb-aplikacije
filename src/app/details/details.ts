@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import axios from 'axios';
 import { FlightModel } from '../../models/flight.model';
 import { Utils } from '../utils';
@@ -7,22 +7,29 @@ import { MatCardModule } from '@angular/material/card';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../services/auth.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-details',
-  imports: [MatCardModule, MatListModule, MatIconModule],
+  imports: [MatCardModule, MatListModule, MatIconModule, RouterLink, MatButtonModule],
   templateUrl: './details.html',
   styleUrl: './details.css',
 })
 export class Details {
-  flight = signal<FlightModel | null>(null)
+  public authService = AuthService;
+  flight = signal<FlightModel | null>(null);
 
-  constructor(route: ActivatedRoute, public utils: Utils, private sanitizer: DomSanitizer) {
+  constructor(
+    route: ActivatedRoute,
+    public utils: Utils,
+    private sanitizer: DomSanitizer,
+  ) {
     route.params.subscribe((params) => {
-      const id = params['id']
+      const id = params['id'];
       axios
         .get(`https://flight.pequla.com/api/flight/${id}`)
-        .then((rsp) => this.flight.set(rsp.data))
+        .then((rsp) => this.flight.set(rsp.data));
     });
   }
 
