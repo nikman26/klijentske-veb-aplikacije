@@ -1,4 +1,6 @@
+import { OrderModel } from "../../models/order.model"
 import { UserModel } from "../../models/user.model"
+import { Order } from "../order/order"
 
 const USERS = 'users'
 const ACTIVE = 'active'
@@ -70,5 +72,19 @@ export class AuthService{
 
     static logout(){
         localStorage.removeItem(ACTIVE)
+    }
+
+    static createOrder(order: OrderModel, flightId: number){
+        order.state = 'w'
+        order.flightId = flightId
+        order.createdAr = new Date().toISOString()
+
+        const users = this.getUsers()
+        for (let u of users){
+            if (u.email === localStorage.getItem(ACTIVE)){
+                u.orders.push(order as OrderModel)
+            }
+        }
+        localStorage.setItem(USERS, JSON.stringify(users))
     }
 }
