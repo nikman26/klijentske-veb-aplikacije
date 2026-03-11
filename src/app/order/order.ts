@@ -72,7 +72,7 @@ export class Order {
     Alerts.confirm(
       `Are you sure you want to place the order for ${this.calculateTotal()} EUR`,
       () => {
-        AuthService.createOrder(this.order as OrderModel, this.flight()!.id);
+        AuthService.createOrder(this.order as OrderModel, this.flight()!);
         this.router.navigate(['/cart']);
       },
     );
