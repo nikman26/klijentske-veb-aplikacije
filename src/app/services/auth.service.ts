@@ -79,6 +79,7 @@ export class AuthService {
     }
 
     static createOrder(order: Partial<OrderModel>, flightId: number) {
+        order.state = 'w'
         order.flightId = flightId
         order.createdAt = new Date().toISOString()
 
